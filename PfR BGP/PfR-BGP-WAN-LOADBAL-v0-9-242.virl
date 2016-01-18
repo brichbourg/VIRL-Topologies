@@ -1,0 +1,1447 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <node name="WAN-EDGE-2" type="SIMPLE" subtype="CSR1000v" location="462,350" ipv4="192.168.0.6">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.ASN" type="Integer">54435</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 22:31:17 UTC Fri Jan 15 2016
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname WAN-EDGE-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+flow record MYRECORD
+ match ipv4 protocol
+ match ipv4 source address
+ match ipv4 destination address
+ match transport source-port
+ match transport destination-port
+ match interface input
+ collect ipv4 dscp
+ collect interface output
+ collect counter bytes
+ collect counter packets
+!
+!
+flow monitor MYMONITOR
+ cache timeout inactive 1000
+ record MYRECORD
+!
+multilink bundle-name authenticated
+!
+!
+key chain pfr
+ key 0
+   key-string cisco 
+!
+crypto pki trustpoint TP-self-signed-1158490112
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1158490112
+ revocation-check none
+ rsakeypair TP-self-signed-1158490112
+!
+crypto pki trustpoint TP-self-signed-2822077821
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2822077821
+ revocation-check none
+ rsakeypair TP-self-signed-2822077821
+!
+crypto pki trustpoint TP-self-signed-373501594
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-373501594
+ revocation-check none
+ rsakeypair TP-self-signed-373501594
+!
+crypto pki trustpoint TP-self-signed-3913781967
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3913781967
+ revocation-check none
+ rsakeypair TP-self-signed-3913781967
+!
+crypto pki trustpoint TP-self-signed-1018421904
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1018421904
+ revocation-check none
+ rsakeypair TP-self-signed-1018421904
+!
+!
+crypto pki certificate chain TP-self-signed-1158490112
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2822077821
+crypto pki certificate chain TP-self-signed-373501594
+crypto pki certificate chain TP-self-signed-3913781967
+crypto pki certificate chain TP-self-signed-1018421904
+!
+pfr border
+ local Loopback0
+ master 1.1.1.1 key-chain pfr
+license udi pid CSR1000V sn 990O85DQJCE
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$EgDm$RgV87SxLVDNolisCQsIir0
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.6 255.255.255.255
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.76 255.255.0.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description to PROVIDER-2
+ ip address 10.0.128.21 255.255.255.252
+ ip flow monitor MYMONITOR input
+ ip flow monitor MYMONITOR output
+ negotiation auto
+!
+interface GigabitEthernet3
+ description to WAN-EDGE-1
+ ip address 10.0.0.14 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+!
+interface GigabitEthernet4
+ description to flat-2
+ ip address 172.16.2.254 255.255.255.0
+ negotiation auto
+!
+!
+router eigrp 1
+ network 10.0.0.12 0.0.0.3
+ network 172.16.2.0 0.0.0.255
+ network 192.168.0.6 0.0.0.0
+!
+router bgp 54435
+ bgp router-id 192.168.0.6
+ bgp log-neighbor-changes
+ neighbor 10.0.128.22 remote-as 1
+ neighbor 10.0.128.22 description eBGP to PROVIDER-2
+ neighbor 172.16.2.100 remote-as 54435
+ neighbor 172.16.2.100 description ASA outside-2
+ neighbor 192.168.0.4 remote-as 54435
+ neighbor 192.168.0.4 description iBGP peer WAN-EDGE-1
+ neighbor 192.168.0.4 update-source Loopback0
+ !
+ address-family ipv4
+  network 10.0.0.12 mask 255.255.255.252
+  network 172.16.2.0 mask 255.255.255.0
+  network 192.168.0.6 mask 255.255.255.255
+  neighbor 10.0.128.22 activate
+  neighbor 10.0.128.22 soft-reconfiguration inbound
+  neighbor 172.16.2.100 activate
+  neighbor 172.16.2.100 next-hop-self
+  neighbor 192.168.0.4 activate
+  neighbor 192.168.0.4 next-hop-self
+  maximum-paths ibgp 2
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+no ip http server
+ip http secure-server
+ip route 10.0.0.12 255.255.255.252 Null0 254
+!
+!
+ip prefix-list outside-1 seq 5 permit 172.16.1.0/24
+!
+route-map ISP-2 permit 10
+ match ip address prefix-list outside-1
+ set metric 100
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.0.0.14" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet4"/>
+    </node>
+    <node name="WAN-EDGE-1" type="SIMPLE" subtype="CSR1000v" location="465,245" ipv4="192.168.0.4">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.ibgp_role" type="String">Peer</entry>
+            <entry key="AutoNetkit.ASN" type="Integer">54435</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 22:30:19 UTC Fri Jan 15 2016
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname WAN-EDGE-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+flow record MYRECORD
+ match ipv4 protocol
+ match ipv4 source address
+ match ipv4 destination address
+ match transport source-port
+ match transport destination-port
+ match interface input
+ collect ipv4 dscp
+ collect interface output
+ collect counter bytes
+ collect counter packets
+!
+!
+flow monitor MYMONITOR
+ cache timeout inactive 1000
+ record MYRECORD
+!
+multilink bundle-name authenticated
+!
+!
+key chain pfr
+ key 0
+   key-string cisco 
+!
+crypto pki trustpoint TP-self-signed-2322120000
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2322120000
+ revocation-check none
+ rsakeypair TP-self-signed-2322120000
+!
+crypto pki trustpoint TP-self-signed-1673803636
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1673803636
+ revocation-check none
+ rsakeypair TP-self-signed-1673803636
+!
+crypto pki trustpoint TP-self-signed-109620527
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-109620527
+ revocation-check none
+ rsakeypair TP-self-signed-109620527
+!
+crypto pki trustpoint TP-self-signed-1067572356
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1067572356
+ revocation-check none
+ rsakeypair TP-self-signed-1067572356
+!
+crypto pki trustpoint TP-self-signed-1303019219
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1303019219
+ revocation-check none
+ rsakeypair TP-self-signed-1303019219
+!
+!
+crypto pki certificate chain TP-self-signed-2322120000
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1673803636
+crypto pki certificate chain TP-self-signed-109620527
+crypto pki certificate chain TP-self-signed-1067572356
+crypto pki certificate chain TP-self-signed-1303019219
+!
+pfr master
+ logging
+ !
+ border 192.168.0.4 key-chain pfr
+  interface GigabitEthernet4 internal
+  interface GigabitEthernet2 external
+ !
+ border 192.168.0.6 key-chain pfr
+  interface GigabitEthernet4 internal
+  interface GigabitEthernet2 external
+ !
+ learn
+  periodic-interval 1
+  prefixes 250 applications 250
+  aggregation-type prefix-length 32
+ max range receive percent 10
+ mode monitor passive
+ mode route metric bgp local-pref 50
+ !
+!
+pfr border
+ local Loopback0
+ master 1.1.1.1 key-chain pfr
+license udi pid CSR1000V sn 9M2CCNVTTTB
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$4Wsn$gJ8509BrZUnEst4c4ktG0.
+!
+redundancy
+!
+!
+!
+!
+!
+ingress-class-map 4
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.4 255.255.255.255
+!
+interface Loopback1
+ ip address 1.1.1.1 255.255.255.255
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.75 255.255.0.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description to PROVIDER-1
+ ip address 10.0.0.5 255.255.255.252
+ ip flow monitor MYMONITOR input
+ ip flow monitor MYMONITOR output
+ negotiation auto
+!
+interface GigabitEthernet3
+ description to WAN-EDGE-2
+ ip address 10.0.0.13 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+!
+interface GigabitEthernet4
+ description to flat-1
+ ip address 172.16.1.254 255.255.255.0
+ negotiation auto
+!
+!
+router eigrp 1
+ network 1.1.1.1 0.0.0.0
+ network 10.0.0.12 0.0.0.3
+ network 172.16.1.0 0.0.0.255
+ network 192.168.0.4 0.0.0.0
+!
+router bgp 54435
+ bgp router-id 192.168.0.4
+ bgp log-neighbor-changes
+ neighbor 10.0.0.6 remote-as 1
+ neighbor 10.0.0.6 description eBGP to PROVIDER-1
+ neighbor 172.16.1.100 remote-as 54435
+ neighbor 172.16.1.100 description ASA outside-1 interface
+ neighbor 192.168.0.6 remote-as 54435
+ neighbor 192.168.0.6 description iBGP peer WAN-EDGE-2
+ neighbor 192.168.0.6 update-source Loopback0
+ !
+ address-family ipv4
+  network 10.0.0.12 mask 255.255.255.252
+  network 172.16.1.0 mask 255.255.255.0
+  network 192.168.0.4 mask 255.255.255.255
+  neighbor 10.0.0.6 activate
+  neighbor 10.0.0.6 soft-reconfiguration inbound
+  neighbor 172.16.1.100 activate
+  neighbor 172.16.1.100 next-hop-self
+  neighbor 192.168.0.6 activate
+  neighbor 192.168.0.6 next-hop-self
+  maximum-paths ibgp 2
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+no ip http server
+ip http secure-server
+ip route 10.0.0.12 255.255.255.252 Null0 254
+!
+!
+ip prefix-list outside-2 seq 5 permit 172.16.2.0/24
+!
+route-map ISP-1 permit 10
+ match ip address prefix-list outside-2
+ set metric 100
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.0.0.13" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet4"/>
+    </node>
+    <node name="PROVIDER-1" type="SIMPLE" subtype="CSR1000v" location="751,242" ipv4="192.168.0.2">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.ASN" type="Integer">1</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 16:45:04 UTC Fri Jan 15 2016
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname PROVIDER-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-4065222179
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4065222179
+ revocation-check none
+ rsakeypair TP-self-signed-4065222179
+!
+crypto pki trustpoint TP-self-signed-2708515645
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2708515645
+ revocation-check none
+ rsakeypair TP-self-signed-2708515645
+!
+crypto pki trustpoint TP-self-signed-2146098319
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2146098319
+ revocation-check none
+ rsakeypair TP-self-signed-2146098319
+!
+crypto pki trustpoint TP-self-signed-4144265993
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4144265993
+ revocation-check none
+ rsakeypair TP-self-signed-4144265993
+!
+crypto pki trustpoint TP-self-signed-9700629
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-9700629
+ revocation-check none
+ rsakeypair TP-self-signed-9700629
+!
+!
+crypto pki certificate chain TP-self-signed-4065222179
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2708515645
+crypto pki certificate chain TP-self-signed-2146098319
+crypto pki certificate chain TP-self-signed-4144265993
+crypto pki certificate chain TP-self-signed-9700629
+license udi pid CSR1000V sn 9OG3FWCSRVH
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$qLLh$BgvasYaCWPG1cKEWpbXe7.
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.83 255.255.0.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description to WAN-EDGE-1
+ ip address 10.0.0.6 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet3
+ description to PROVIDER-2
+ ip address 10.0.128.1 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+!
+interface GigabitEthernet4
+ description to iosv-1
+ ip address 10.0.0.1 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet5
+ description to iosv-2
+ ip address 10.0.128.5 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet6
+ description to iosv-3
+ ip address 10.0.128.9 255.255.255.252
+ negotiation auto
+!
+router bgp 1
+ bgp router-id 192.168.0.2
+ bgp log-neighbor-changes
+ neighbor 10.0.0.2 remote-as 2
+ neighbor 10.0.0.2 description eBGP to iosv-1
+ neighbor 10.0.0.5 remote-as 54435
+ neighbor 10.0.0.5 description eBGP to WAN-EDGE-1
+ neighbor 10.0.128.6 remote-as 3
+ neighbor 10.0.128.6 description eBGP to iosv-2
+ neighbor 10.0.128.10 remote-as 4
+ neighbor 10.0.128.10 description eBGP to iosv-3
+ neighbor 192.168.0.8 remote-as 1
+ neighbor 192.168.0.8 description iBGP peer PROVIDER-2
+ neighbor 192.168.0.8 update-source Loopback0
+ !
+ address-family ipv4
+  network 10.0.0.0 mask 255.255.255.248
+  network 10.0.128.0 mask 255.255.255.248
+  network 10.0.128.8 mask 255.255.255.252
+  network 10.0.128.16 mask 255.255.255.240
+  network 192.168.0.2 mask 255.255.255.255
+  neighbor 10.0.0.2 activate
+  neighbor 10.0.0.2 send-community
+  neighbor 10.0.0.2 next-hop-self
+  neighbor 10.0.0.5 activate
+  neighbor 10.0.0.5 send-community
+  neighbor 10.0.0.5 next-hop-self
+  neighbor 10.0.0.5 default-originate
+  neighbor 10.0.0.5 filter-list 1 out
+  neighbor 10.0.128.6 activate
+  neighbor 10.0.128.6 send-community
+  neighbor 10.0.128.6 next-hop-self
+  neighbor 10.0.128.6 default-originate
+  neighbor 10.0.128.6 filter-list 1 out
+  neighbor 10.0.128.10 activate
+  neighbor 10.0.128.10 send-community
+  neighbor 10.0.128.10 next-hop-self
+  neighbor 10.0.128.10 default-originate
+  neighbor 10.0.128.10 filter-list 1 out
+  neighbor 192.168.0.8 activate
+  neighbor 192.168.0.8 send-community
+  neighbor 192.168.0.8 next-hop-self
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 deny .*
+no ip http server
+ip http secure-server
+ip route 10.0.0.0 255.255.255.248 Null0 254
+ip route 10.0.128.0 255.255.255.248 Null0 254
+ip route 10.0.128.8 255.255.255.252 Null0 254
+ip route 10.0.128.16 255.255.255.240 Null0 254
+ip route 192.168.0.8 255.255.255.255 10.0.128.2
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.0.128.1" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet4"/>
+        <interface id="3" name="GigabitEthernet5" ipv4="10.0.128.5" netPrefixLenV4="30"/>
+        <interface id="4" name="GigabitEthernet6" ipv4="10.0.128.9" netPrefixLenV4="30"/>
+    </node>
+    <node name="PROVIDER-2" type="SIMPLE" subtype="CSR1000v" location="748,349" ipv4="192.168.0.8">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.ASN" type="Integer">1</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 19:58:59 UTC Fri Jan 15 2016
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname PROVIDER-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-3062649813
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3062649813
+ revocation-check none
+ rsakeypair TP-self-signed-3062649813
+!
+crypto pki trustpoint TP-self-signed-286696137
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-286696137
+ revocation-check none
+ rsakeypair TP-self-signed-286696137
+!
+crypto pki trustpoint TP-self-signed-1641600827
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1641600827
+ revocation-check none
+ rsakeypair TP-self-signed-1641600827
+!
+crypto pki trustpoint TP-self-signed-2013435242
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2013435242
+ revocation-check none
+ rsakeypair TP-self-signed-2013435242
+!
+crypto pki trustpoint TP-self-signed-1695732990
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1695732990
+ revocation-check none
+ rsakeypair TP-self-signed-1695732990
+!
+!
+crypto pki certificate chain TP-self-signed-3062649813
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-286696137
+crypto pki certificate chain TP-self-signed-1641600827
+crypto pki certificate chain TP-self-signed-2013435242
+crypto pki certificate chain TP-self-signed-1695732990
+license udi pid CSR1000V sn 9OPNIYE5U4F
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$cQLf$DIFjQZ2.t5WoBsUX7oVf81
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.8 255.255.255.255
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.82 255.255.0.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description to WAN-EDGE-2
+ ip address 10.0.128.22 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet3
+ description to PROVIDER-1
+ ip address 10.0.128.2 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+!
+interface GigabitEthernet4
+ description to iosv-3
+ ip address 10.0.128.25 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet5
+ description to iosv-4
+ ip address 10.0.128.29 255.255.255.252
+ negotiation auto
+!
+interface GigabitEthernet6
+ description to iosv-2
+ ip address 10.0.128.18 255.255.255.252
+ negotiation auto
+!
+router bgp 1
+ bgp router-id 192.168.0.8
+ bgp log-neighbor-changes
+ neighbor 10.0.128.17 remote-as 3
+ neighbor 10.0.128.17 description eBGP to iosv-2
+ neighbor 10.0.128.21 remote-as 54435
+ neighbor 10.0.128.21 description eBGP to WAN-EDGE-2
+ neighbor 10.0.128.26 remote-as 4
+ neighbor 10.0.128.26 description eBGP to iosv-3
+ neighbor 10.0.128.30 remote-as 5
+ neighbor 10.0.128.30 description eBGP to iosv-4
+ neighbor 192.168.0.2 remote-as 1
+ neighbor 192.168.0.2 description iBGP peer PROVIDER-1
+ neighbor 192.168.0.2 update-source Loopback0
+ !
+ address-family ipv4
+  network 10.0.0.0 mask 255.255.255.248
+  network 10.0.128.0 mask 255.255.255.248
+  network 10.0.128.8 mask 255.255.255.252
+  network 10.0.128.16 mask 255.255.255.240
+  network 192.168.0.8 mask 255.255.255.255
+  neighbor 10.0.128.17 activate
+  neighbor 10.0.128.17 send-community
+  neighbor 10.0.128.17 next-hop-self
+  neighbor 10.0.128.17 default-originate
+  neighbor 10.0.128.17 filter-list 1 out
+  neighbor 10.0.128.21 activate
+  neighbor 10.0.128.21 send-community
+  neighbor 10.0.128.21 next-hop-self
+  neighbor 10.0.128.21 default-originate
+  neighbor 10.0.128.21 filter-list 1 out
+  neighbor 10.0.128.26 activate
+  neighbor 10.0.128.26 send-community
+  neighbor 10.0.128.26 next-hop-self
+  neighbor 10.0.128.26 default-originate
+  neighbor 10.0.128.26 filter-list 1 out
+  neighbor 10.0.128.30 activate
+  neighbor 10.0.128.30 send-community
+  neighbor 10.0.128.30 next-hop-self
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.2 send-community
+  neighbor 192.168.0.2 next-hop-self
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip as-path access-list 1 deny .*
+no ip http server
+ip http secure-server
+ip route 10.0.0.0 255.255.255.248 Null0 254
+ip route 10.0.128.0 255.255.255.248 Null0 254
+ip route 10.0.128.8 255.255.255.252 Null0 254
+ip route 10.0.128.16 255.255.255.240 Null0 254
+ip route 192.168.0.2 255.255.255.255 10.0.128.1
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="1" name="GigabitEthernet3" ipv4="10.0.128.2" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet4" ipv4="10.0.128.25" netPrefixLenV4="30"/>
+        <interface id="3" name="GigabitEthernet5"/>
+        <interface id="4" name="GigabitEthernet6" ipv4="10.0.128.18" netPrefixLenV4="30"/>
+    </node>
+    <node name="flat-A-1" type="ASSET" subtype="FLAT" location="351,252">
+        <interface id="0" name="link0"/>
+    </node>
+    <node name="flat-B-1" type="ASSET" subtype="FLAT" location="349,353">
+        <extensions>
+            <entry key="host_network" type="String">flat1</entry>
+        </extensions>
+        <interface id="0" name="link0"/>
+    </node>
+    <node name="iosv-1" type="SIMPLE" subtype="IOSv" location="950,247" ipv4="192.168.0.7">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.ASN" type="Integer">3</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 16:55:56 UTC Fri Jan 15 2016
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname iosv-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password cisco
+!
+no aaa new-model
+ethernet lmi ce
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.7 255.255.255.255
+!
+interface Loopback1
+ ip address 10.10.10.1 255.255.255.0
+!
+interface GigabitEthernet0/0
+ description OOB Management
+ ip address 10.255.1.78 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description to PROVIDER-1
+ ip address 10.0.128.6 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description to PROVIDER-2
+ ip address 10.0.128.17 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description to server-2
+ ip address 10.0.128.13 255.255.255.252
+ ip ospf cost 1
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 3
+ bgp router-id 192.168.0.7
+ bgp log-neighbor-changes
+ neighbor 10.0.128.5 remote-as 1
+ neighbor 10.0.128.5 description eBGP to PROVIDER-1
+ neighbor 10.0.128.18 remote-as 1
+ neighbor 10.0.128.18 description eBGP to PROVIDER-2
+ !
+ address-family ipv4
+  network 10.0.128.12 mask 255.255.255.252
+  network 10.10.10.0 mask 255.255.255.0
+  network 192.168.0.7 mask 255.255.255.255
+  neighbor 10.0.128.5 activate
+  neighbor 10.0.128.5 send-community
+  neighbor 10.0.128.5 next-hop-self
+  neighbor 10.0.128.18 activate
+  neighbor 10.0.128.18 send-community
+  neighbor 10.0.128.18 next-hop-self
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 10.0.128.12 255.255.255.252 Null0 254
+!
+!
+!
+!
+control-plane
+!
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.128.6" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.128.17" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+    </node>
+    <node name="iosv-2" type="SIMPLE" subtype="IOSv" location="948,347" ipv4="192.168.0.9">
+        <extensions>
+            <entry key="AutoNetkit.mgmt_ip" type="string"></entry>
+            <entry key="AutoNetkit.ASN" type="Integer">4</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 20:20:46 UTC Fri Jan 15 2016
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname iosv-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password cisco
+!
+no aaa new-model
+ethernet lmi ce
+!
+!
+!
+bsd-client server url https://cloudsso.cisco.com/as/token.oauth2
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+cts logging verbose
+!
+!
+!
+redundancy
+!
+no cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.9 255.255.255.255
+!
+interface Loopback1
+ ip address 20.20.20.1 255.255.255.0
+!
+interface GigabitEthernet0/0
+ description OOB Management
+ ip address 10.255.1.77 255.255.0.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ description to PROVIDER-1
+ ip address 10.0.128.10 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ description to PROVIDER-2
+ ip address 10.0.128.26 255.255.255.252
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description to server-3
+ ip address 10.0.0.17 255.255.255.252
+ ip ospf cost 1
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 4
+ bgp router-id 192.168.0.9
+ bgp log-neighbor-changes
+ neighbor 10.0.128.9 remote-as 1
+ neighbor 10.0.128.9 description eBGP to PROVIDER-1
+ neighbor 10.0.128.25 remote-as 1
+ neighbor 10.0.128.25 description eBGP to PROVIDER-2
+ !
+ address-family ipv4
+  network 10.0.0.16 mask 255.255.255.252
+  network 20.20.20.0 mask 255.255.255.0
+  network 192.168.0.9 mask 255.255.255.255
+  neighbor 10.0.128.9 activate
+  neighbor 10.0.128.9 send-community
+  neighbor 10.0.128.9 next-hop-self
+  neighbor 10.0.128.25 activate
+  neighbor 10.0.128.25 send-community
+  neighbor 10.0.128.25 next-hop-self
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 10.0.0.16 255.255.255.252 Null0 254
+!
+!
+!
+!
+control-plane
+!
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+no scheduler allocate
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/1" ipv4="10.0.128.10" netPrefixLenV4="30"/>
+        <interface id="1" name="GigabitEthernet0/2" ipv4="10.0.128.26" netPrefixLenV4="30"/>
+        <interface id="2" name="GigabitEthernet0/3"/>
+    </node>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[2]" src="/virl:topology/virl:node[2]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[2]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[7]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[4]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[5]"/>
+    <connection dst="/virl:topology/virl:node[8]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[4]/virl:interface[5]" src="/virl:topology/virl:node[7]/virl:interface[2]"/>
+    <connection dst="/virl:interface" src="/virl:interface"/>
+    <connection dst="/virl:interface" src="/virl:interface"/>
+    <connection dst="/virl:interface" src="/virl:topology/virl:node[7]/virl:interface[3]"/>
+    <connection dst="/virl:interface" src="/virl:topology/virl:node[8]/virl:interface[3]"/>
+    <connection dst="/virl:interface" src="/virl:interface"/>
+    <connection dst="/virl:interface" src="/virl:interface"/>
+    <connection dst="/virl:topology/virl:node[5]/virl:interface[1]" src="/virl:topology/virl:node[2]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[6]/virl:interface[1]" src="/virl:topology/virl:node[1]/virl:interface[3]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[1]" src="/virl:topology/virl:node[4]/virl:interface[1]"/>
+</topology>

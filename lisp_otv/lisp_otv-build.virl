@@ -1,0 +1,2926 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <extensions>
+        <entry type="Boolean" key="AutoNetkit.enable_cdp">true</entry>
+        <entry type="String" key="AutoNetkit.ipv4_infra_subnet">10.100.0.0</entry>
+        <entry type="String" key="AutoNetkit.ipv4_infra_prefix">16</entry>
+    </extensions>
+    <node ipv4="192.168.0.2" location="151,178" subtype="CSR1000v" type="SIMPLE" name="clientsite-1">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">RRC</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.IGP">ospf</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">0</entry>
+            <entry type="String" key="config">!
+! Last configuration change at 20:27:30 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname clientsite-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-2276736105
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2276736105
+ revocation-check none
+ rsakeypair TP-self-signed-2276736105
+!
+crypto pki trustpoint TP-self-signed-1930783054
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1930783054
+ revocation-check none
+ rsakeypair TP-self-signed-1930783054
+!
+crypto pki trustpoint TP-self-signed-2525151143
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2525151143
+ revocation-check none
+ rsakeypair TP-self-signed-2525151143
+!
+crypto pki trustpoint TP-self-signed-3890717810
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3890717810
+ revocation-check none
+ rsakeypair TP-self-signed-3890717810
+!
+crypto pki trustpoint TP-self-signed-2039357171
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2039357171
+ revocation-check none
+ rsakeypair TP-self-signed-2039357171
+!
+crypto pki trustpoint TP-self-signed-212674936
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-212674936
+ revocation-check none
+ rsakeypair TP-self-signed-212674936
+!
+crypto pki trustpoint TP-self-signed-3884126999
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3884126999
+ revocation-check none
+ rsakeypair TP-self-signed-3884126999
+!
+crypto pki trustpoint TP-self-signed-1761899251
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1761899251
+ revocation-check none
+ rsakeypair TP-self-signed-1761899251
+!
+crypto pki trustpoint TP-self-signed-4067946421
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4067946421
+ revocation-check none
+ rsakeypair TP-self-signed-4067946421
+!
+crypto pki trustpoint TP-self-signed-1278774559
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1278774559
+ revocation-check none
+ rsakeypair TP-self-signed-1278774559
+!
+crypto pki trustpoint TP-self-signed-865127195
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-865127195
+ revocation-check none
+ rsakeypair TP-self-signed-865127195
+!
+!
+crypto pki certificate chain TP-self-signed-2276736105
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1930783054
+crypto pki certificate chain TP-self-signed-2525151143
+crypto pki certificate chain TP-self-signed-3890717810
+crypto pki certificate chain TP-self-signed-2039357171
+crypto pki certificate chain TP-self-signed-212674936
+crypto pki certificate chain TP-self-signed-3884126999
+crypto pki certificate chain TP-self-signed-1761899251
+crypto pki certificate chain TP-self-signed-4067946421
+crypto pki certificate chain TP-self-signed-1278774559
+crypto pki certificate chain TP-self-signed-865127195
+license udi pid CSR1000V sn 9YKOAV6693D
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$Mx1e$h/cFy4Kn.udBlof4nf4xz1
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.2 255.255.255.255
+!
+interface LISP0
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.0.255 255.255.0.0
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet2
+ description to client-1
+ ip address 10.100.0.17 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet3
+ description to ipcore-1
+ ip address 10.100.0.21 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet4
+ description to ipcore-2
+ ip address 10.100.128.1 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+router lisp
+ site-id 0x00000003
+ database-mapping 10.100.0.16/30 10.100.0.21 priority 10 weight 50
+ database-mapping 10.100.0.16/30 10.100.128.1 priority 10 weight 50
+ ipv4 itr map-resolver 10.90.90.90
+ ipv4 itr
+ ipv4 etr map-server 10.91.91.91 key cisco
+ ipv4 etr map-server 10.92.92.92 key cisco
+ ipv4 etr
+ exit
+!
+router ospf 1
+ router-id 192.168.0.2
+ passive-interface Loopback0
+ network 10.100.0.20 0.0.0.3 area 0
+ network 10.100.128.0 0.0.0.3 area 0
+ network 192.168.0.2 0.0.0.0 area 0
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+no ip http server
+ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.100.0.17" name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface name="GigabitEthernet4" id="2"/>
+    </node>
+    <node ipv4="192.168.0.10" location="1071,182" subtype="CSR1000v" type="SIMPLE" name="clientsite-2">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">RRC</entry>
+            <entry type="string" key="config">!
+! Last configuration change at 20:26:58 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname clientsite-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-2645783150
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2645783150
+ revocation-check none
+ rsakeypair TP-self-signed-2645783150
+!
+crypto pki trustpoint TP-self-signed-2501739708
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2501739708
+ revocation-check none
+ rsakeypair TP-self-signed-2501739708
+!
+crypto pki trustpoint TP-self-signed-2175721778
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2175721778
+ revocation-check none
+ rsakeypair TP-self-signed-2175721778
+!
+crypto pki trustpoint TP-self-signed-4060993025
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4060993025
+ revocation-check none
+ rsakeypair TP-self-signed-4060993025
+!
+crypto pki trustpoint TP-self-signed-41985868
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-41985868
+ revocation-check none
+ rsakeypair TP-self-signed-41985868
+!
+crypto pki trustpoint TP-self-signed-3428111527
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3428111527
+ revocation-check none
+ rsakeypair TP-self-signed-3428111527
+!
+crypto pki trustpoint TP-self-signed-845349116
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-845349116
+ revocation-check none
+ rsakeypair TP-self-signed-845349116
+!
+crypto pki trustpoint TP-self-signed-4099353286
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4099353286
+ revocation-check none
+ rsakeypair TP-self-signed-4099353286
+!
+crypto pki trustpoint TP-self-signed-1064192902
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1064192902
+ revocation-check none
+ rsakeypair TP-self-signed-1064192902
+!
+crypto pki trustpoint TP-self-signed-262607319
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-262607319
+ revocation-check none
+ rsakeypair TP-self-signed-262607319
+!
+crypto pki trustpoint TP-self-signed-2547317764
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2547317764
+ revocation-check none
+ rsakeypair TP-self-signed-2547317764
+!
+!
+crypto pki certificate chain TP-self-signed-2645783150
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2501739708
+crypto pki certificate chain TP-self-signed-2175721778
+crypto pki certificate chain TP-self-signed-4060993025
+crypto pki certificate chain TP-self-signed-41985868
+crypto pki certificate chain TP-self-signed-3428111527
+crypto pki certificate chain TP-self-signed-845349116
+crypto pki certificate chain TP-self-signed-4099353286
+crypto pki certificate chain TP-self-signed-1064192902
+crypto pki certificate chain TP-self-signed-262607319
+crypto pki certificate chain TP-self-signed-2547317764
+license udi pid CSR1000V sn 9614VFP0J7S
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$7fdj$hkd.Fe0aVDJpDhKfcllcP.
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.10 255.255.255.255
+!
+interface LISP0
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.1 255.255.0.0
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet2
+ description to client-2
+ ip address 10.100.128.25 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet3
+ description to ipcore-1
+ ip address 10.100.0.30 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet4
+ description to ipcore-2
+ ip address 10.100.128.22 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+router lisp
+ site-id 0x00000004
+ database-mapping 10.100.128.24/30 10.100.0.30 priority 10 weight 50
+ database-mapping 10.100.128.24/30 10.100.128.22 priority 10 weight 50
+ ipv4 itr map-resolver 10.90.90.90
+ ipv4 itr
+ ipv4 etr map-server 10.91.91.91 key cisco
+ ipv4 etr map-server 10.92.92.92 key cisco
+ ipv4 etr
+ exit
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.100.0.28 0.0.0.3 area 0
+ network 192.168.0.10 0.0.0.0 area 0
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+no ip http server
+ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.IGP">ospf</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">0</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.100.128.25" name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface name="GigabitEthernet4" id="2"/>
+    </node>
+    <node location="165,30" subtype="server" type="SIMPLE" name="client-1">
+        <extensions>
+            <entry type="String" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: client-1
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.100.0.18 netmask 255.255.255.252
+    route add -host 192.168.0.10 gw 10.100.0.17 dev eth1
+    route add -host 192.168.0.12 gw 10.100.0.17 dev eth1
+    route add -host 192.168.0.5 gw 10.100.0.17 dev eth1
+    route add -host 192.168.0.6 gw 10.100.0.17 dev eth1
+    route add -net 10.100.0.0/27 gw 10.100.0.17 dev eth1
+    route add -net 10.100.128.0/28 gw 10.100.0.17 dev eth1
+    route add -net 10.100.128.16/29 gw 10.100.0.17 dev eth1
+    route add -net 10.100.128.24/30 gw 10.100.0.17 dev eth1
+    route add -net 192.168.0.2/31 gw 10.100.0.17 dev eth1
+    route add -net 192.168.0.8/31 gw 10.100.0.17 dev eth1
+    route add -net 10.254.254.0/24 gw 10.100.0.17 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.100.0.18" name="eth1" id="0"/>
+    </node>
+    <node location="1071,44" subtype="server" type="SIMPLE" name="client-2">
+        <extensions>
+            <entry type="String" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: client-2
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.100.128.26 netmask 255.255.255.252
+    route add -host 192.168.0.10 gw 10.100.128.25 dev eth1
+    route add -host 192.168.0.12 gw 10.100.128.25 dev eth1
+    route add -host 192.168.0.5 gw 10.100.128.25 dev eth1
+    route add -host 192.168.0.6 gw 10.100.128.25 dev eth1
+    route add -net 10.100.0.0/27 gw 10.100.128.25 dev eth1
+    route add -net 10.100.128.0/28 gw 10.100.128.25 dev eth1
+    route add -net 10.100.128.16/29 gw 10.100.128.25 dev eth1
+    route add -net 10.100.128.24/30 gw 10.100.128.25 dev eth1
+    route add -net 192.168.0.2/31 gw 10.100.128.25 dev eth1
+    route add -net 192.168.0.8/31 gw 10.100.128.25 dev eth1
+    route add -net 10.254.254.0/24 gw 10.100.128.25 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.100.128.26" name="eth1" id="0"/>
+    </node>
+    <node ipv4="192.168.0.5" location="169,433" subtype="CSR1000v" type="SIMPLE" name="dc-edge-1">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">RRC</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.IGP">ospf</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">0</entry>
+            <entry type="String" key="config">!
+! Last configuration change at 20:55:18 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname dc-edge-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+ip multicast-routing distributed
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-3053549889
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3053549889
+ revocation-check none
+ rsakeypair TP-self-signed-3053549889
+!
+crypto pki trustpoint TP-self-signed-3386036304
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3386036304
+ revocation-check none
+ rsakeypair TP-self-signed-3386036304
+!
+crypto pki trustpoint TP-self-signed-3879555536
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3879555536
+ revocation-check none
+ rsakeypair TP-self-signed-3879555536
+!
+crypto pki trustpoint TP-self-signed-1588761066
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1588761066
+ revocation-check none
+ rsakeypair TP-self-signed-1588761066
+!
+crypto pki trustpoint TP-self-signed-130051243
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-130051243
+ revocation-check none
+ rsakeypair TP-self-signed-130051243
+!
+crypto pki trustpoint TP-self-signed-1704585995
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1704585995
+ revocation-check none
+ rsakeypair TP-self-signed-1704585995
+!
+crypto pki trustpoint TP-self-signed-2030476994
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2030476994
+ revocation-check none
+ rsakeypair TP-self-signed-2030476994
+!
+crypto pki trustpoint TP-self-signed-241332945
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-241332945
+ revocation-check none
+ rsakeypair TP-self-signed-241332945
+!
+crypto pki trustpoint TP-self-signed-2964799077
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2964799077
+ revocation-check none
+ rsakeypair TP-self-signed-2964799077
+!
+crypto pki trustpoint TP-self-signed-1102841928
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1102841928
+ revocation-check none
+ rsakeypair TP-self-signed-1102841928
+!
+!
+crypto pki certificate chain TP-self-signed-3053549889
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-3386036304
+crypto pki certificate chain TP-self-signed-3879555536
+crypto pki certificate chain TP-self-signed-1588761066
+crypto pki certificate chain TP-self-signed-130051243
+crypto pki certificate chain TP-self-signed-1704585995
+crypto pki certificate chain TP-self-signed-2030476994
+crypto pki certificate chain TP-self-signed-241332945
+crypto pki certificate chain TP-self-signed-2964799077
+crypto pki certificate chain TP-self-signed-1102841928
+license udi pid CSR1000V sn 95MIJ2R3BY0
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$/5y.$g.TzoF1sGF71mJAvzvV4V/
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.5 255.255.255.255
+!
+interface LISP0
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.5 255.255.0.0
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet2
+ description to ipcore-1
+ ip address 10.100.0.26 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet3
+ description to ipcore-2
+ ip address 10.100.128.9 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet4
+ description to dc-switch-1 vlan 2
+ ip address 10.100.0.10 255.255.255.248
+ ip pim passive
+ ip igmp version 3
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet5
+ description to dc-switch-1 vlan 100
+ ip address 10.254.254.2 255.255.255.0
+ negotiation auto
+ cdp enable
+!
+router lisp
+ site-id 0x00000001
+ locator-set DC1
+  10.100.0.26 priority 10 weight 50
+  10.100.128.9 priority 10 weight 50
+  exit
+ !
+ database-mapping 10.100.0.8/29 locator-set DC1
+ dynamic-eid DC1-DC2
+  database-mapping 10.254.254.0/24 locator-set DC1
+  map-server 10.91.91.91 key cisco
+  map-server 10.92.92.92 key cisco
+  map-notify-group 239.254.254.254
+  exit
+ !
+ ipv4 itr map-resolver 10.90.90.90
+ ipv4 itr
+ ipv4 etr map-server 10.91.91.91 key cisco
+ ipv4 etr map-server 10.92.92.92 key cisco
+ ipv4 etr
+ exit
+!
+router ospf 1
+ router-id 192.168.0.5
+ passive-interface Loopback0
+ network 10.90.90.90 0.0.0.0 area 0
+ network 10.100.0.24 0.0.0.3 area 0
+ network 10.100.128.8 0.0.0.3 area 0
+ network 192.168.0.5 0.0.0.0 area 0
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip pim rp-address 1.1.1.1
+ip pim ssm default
+no ip http server
+ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0 4
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.10" name="GigabitEthernet4" id="2"/>
+        <interface name="GigabitEthernet5" id="3"/>
+    </node>
+    <node ipv4="192.168.0.9" location="1101,417" subtype="CSR1000v" type="SIMPLE" name="dc-edge-2">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">RRC</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.IGP">ospf</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">0</entry>
+            <entry type="String" key="config">!
+! Last configuration change at 20:55:42 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname dc-edge-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+ip multicast-routing distributed
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-1190810020
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1190810020
+ revocation-check none
+ rsakeypair TP-self-signed-1190810020
+!
+crypto pki trustpoint TP-self-signed-506756059
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-506756059
+ revocation-check none
+ rsakeypair TP-self-signed-506756059
+!
+crypto pki trustpoint TP-self-signed-3692473092
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3692473092
+ revocation-check none
+ rsakeypair TP-self-signed-3692473092
+!
+crypto pki trustpoint TP-self-signed-328801264
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-328801264
+ revocation-check none
+ rsakeypair TP-self-signed-328801264
+!
+crypto pki trustpoint TP-self-signed-2878040238
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2878040238
+ revocation-check none
+ rsakeypair TP-self-signed-2878040238
+!
+crypto pki trustpoint TP-self-signed-363013832
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-363013832
+ revocation-check none
+ rsakeypair TP-self-signed-363013832
+!
+crypto pki trustpoint TP-self-signed-753717208
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-753717208
+ revocation-check none
+ rsakeypair TP-self-signed-753717208
+!
+crypto pki trustpoint TP-self-signed-1903550165
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1903550165
+ revocation-check none
+ rsakeypair TP-self-signed-1903550165
+!
+crypto pki trustpoint TP-self-signed-4056686731
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4056686731
+ revocation-check none
+ rsakeypair TP-self-signed-4056686731
+!
+crypto pki trustpoint TP-self-signed-1865601855
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1865601855
+ revocation-check none
+ rsakeypair TP-self-signed-1865601855
+!
+crypto pki trustpoint TP-self-signed-3487289254
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3487289254
+ revocation-check none
+ rsakeypair TP-self-signed-3487289254
+!
+!
+crypto pki certificate chain TP-self-signed-1190810020
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-506756059
+crypto pki certificate chain TP-self-signed-3692473092
+crypto pki certificate chain TP-self-signed-328801264
+crypto pki certificate chain TP-self-signed-2878040238
+crypto pki certificate chain TP-self-signed-363013832
+crypto pki certificate chain TP-self-signed-753717208
+crypto pki certificate chain TP-self-signed-1903550165
+crypto pki certificate chain TP-self-signed-4056686731
+crypto pki certificate chain TP-self-signed-1865601855
+crypto pki certificate chain TP-self-signed-3487289254
+license udi pid CSR1000V sn 9OM0NMIH5FH
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$DdVj$V.I0rJ/D60og/pheLhcyr0
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.9 255.255.255.255
+!
+interface LISP0
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.4 255.255.0.0
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet2
+ description to ipcore-1
+ ip address 10.100.128.6 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet3
+ description to ipcore-2
+ ip address 10.100.128.18 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet4
+ description to dc-switch-2 vlan 2
+ ip address 10.100.0.3 255.255.255.248
+ ip pim passive
+ ip igmp version 3
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet5
+ description to dc-switch-2 vlan 100
+ ip address 10.254.254.3 255.255.255.0
+ negotiation auto
+ cdp enable
+!
+router lisp
+ site-id 0x00000002
+ locator-set DC2
+  10.100.128.6 priority 10 weight 50
+  10.100.128.18 priority 10 weight 50
+  exit
+ !
+ database-mapping 10.100.0.0/29 locator-set DC2
+ dynamic-eid DC1-DC2
+  database-mapping 10.254.254.0/24 locator-set DC2
+  map-server 10.91.91.91 key cisco
+  map-server 10.92.92.92 key cisco
+  map-notify-group 239.254.254.254
+  exit
+ !
+ ipv4 itr map-resolver 10.90.90.90
+ ipv4 itr
+ ipv4 etr map-server 10.91.91.91 key cisco
+ ipv4 etr map-server 10.92.92.92 key cisco
+ ipv4 etr
+ exit
+!
+router ospf 1
+ router-id 192.168.0.9
+ passive-interface Loopback0
+ network 10.90.90.90 0.0.0.0 area 0
+ network 10.100.128.4 0.0.0.3 area 0
+ network 10.100.128.16 0.0.0.3 area 0
+ network 192.168.0.9 0.0.0.0 area 0
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip pim rp-address 1.1.1.1
+ip pim ssm default
+no ip http server
+ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 0 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.3" name="GigabitEthernet4" id="2"/>
+        <interface name="GigabitEthernet5" id="3"/>
+    </node>
+    <node ipv4="192.168.0.3" location="435,578" subtype="CSR1000v" type="SIMPLE" name="dc-otv-1">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="config">!
+! Last configuration change at 20:55:42 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname dc-otv-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+ip multicast-routing distributed
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+otv site bridge-domain 10
+!
+otv site-identifier 0000.0000.0001
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-2417558818
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2417558818
+ revocation-check none
+ rsakeypair TP-self-signed-2417558818
+!
+crypto pki trustpoint TP-self-signed-700211828
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-700211828
+ revocation-check none
+ rsakeypair TP-self-signed-700211828
+!
+crypto pki trustpoint TP-self-signed-1089698776
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1089698776
+ revocation-check none
+ rsakeypair TP-self-signed-1089698776
+!
+crypto pki trustpoint TP-self-signed-309596573
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-309596573
+ revocation-check none
+ rsakeypair TP-self-signed-309596573
+!
+crypto pki trustpoint TP-self-signed-1538502704
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1538502704
+ revocation-check none
+ rsakeypair TP-self-signed-1538502704
+!
+crypto pki trustpoint TP-self-signed-3404960955
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3404960955
+ revocation-check none
+ rsakeypair TP-self-signed-3404960955
+!
+crypto pki trustpoint TP-self-signed-2208672874
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2208672874
+ revocation-check none
+ rsakeypair TP-self-signed-2208672874
+!
+crypto pki trustpoint TP-self-signed-1122789885
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1122789885
+ revocation-check none
+ rsakeypair TP-self-signed-1122789885
+!
+crypto pki trustpoint TP-self-signed-2739726408
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2739726408
+ revocation-check none
+ rsakeypair TP-self-signed-2739726408
+!
+crypto pki trustpoint TP-self-signed-2249217922
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2249217922
+ revocation-check none
+ rsakeypair TP-self-signed-2249217922
+!
+crypto pki trustpoint TP-self-signed-1085350728
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1085350728
+ revocation-check none
+ rsakeypair TP-self-signed-1085350728
+!
+!
+crypto pki certificate chain TP-self-signed-2417558818
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-700211828
+crypto pki certificate chain TP-self-signed-1089698776
+crypto pki certificate chain TP-self-signed-309596573
+crypto pki certificate chain TP-self-signed-1538502704
+crypto pki certificate chain TP-self-signed-3404960955
+crypto pki certificate chain TP-self-signed-2208672874
+crypto pki certificate chain TP-self-signed-1122789885
+crypto pki certificate chain TP-self-signed-2739726408
+crypto pki certificate chain TP-self-signed-2249217922
+crypto pki certificate chain TP-self-signed-1085350728
+license udi pid CSR1000V sn 9BCTB9WD64G
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$F3BQ$Hi/Sbd9JmhjK/KjwrGxdI1
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.3 255.255.255.255
+!
+interface Overlay0
+ no ip address
+ otv join-interface GigabitEthernet2.2
+ otv adjacency-server unicast-only
+ service instance 100 ethernet
+  encapsulation dot1q 100
+  bridge-domain 100
+ !
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.0.250 255.255.0.0
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet2
+ description to dc-switch-1
+ no ip address
+ negotiation auto
+ cdp enable
+ service instance 100 ethernet
+  encapsulation dot1q 100
+  bridge-domain 100
+ !
+!
+interface GigabitEthernet2.2
+ encapsulation dot1Q 2 native
+ ip address 10.100.0.11 255.255.255.248
+ ip pim passive
+ ip igmp version 3
+ ip ospf cost 1
+!
+interface GigabitEthernet3
+ no ip address
+ negotiation auto
+ service instance 10 ethernet
+  encapsulation dot1q 10
+  bridge-domain 10
+ !
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.100.0.8 0.0.0.7 area 1
+ network 192.168.0.3 0.0.0.0 area 1
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip pim ssm default
+no ip http server
+ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.100.0.10
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 0 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.IGP">ospf</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">1</entry>
+        </extensions>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.11" name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+    </node>
+    <node ipv4="192.168.0.8" location="812,579" subtype="CSR1000v" type="SIMPLE" name="dc-otv-2">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.IGP">ospf</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">2</entry>
+            <entry type="String" key="config">!
+! Last configuration change at 20:55:41 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname dc-otv-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+ip multicast-routing distributed
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+otv site bridge-domain 11
+!
+otv site-identifier 0000.0000.0002
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-2425066383
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2425066383
+ revocation-check none
+ rsakeypair TP-self-signed-2425066383
+!
+crypto pki trustpoint TP-self-signed-3045907028
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3045907028
+ revocation-check none
+ rsakeypair TP-self-signed-3045907028
+!
+crypto pki trustpoint TP-self-signed-2057730617
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2057730617
+ revocation-check none
+ rsakeypair TP-self-signed-2057730617
+!
+crypto pki trustpoint TP-self-signed-385815781
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-385815781
+ revocation-check none
+ rsakeypair TP-self-signed-385815781
+!
+crypto pki trustpoint TP-self-signed-716545758
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-716545758
+ revocation-check none
+ rsakeypair TP-self-signed-716545758
+!
+crypto pki trustpoint TP-self-signed-2861411470
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2861411470
+ revocation-check none
+ rsakeypair TP-self-signed-2861411470
+!
+crypto pki trustpoint TP-self-signed-3628364303
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3628364303
+ revocation-check none
+ rsakeypair TP-self-signed-3628364303
+!
+crypto pki trustpoint TP-self-signed-1441058062
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1441058062
+ revocation-check none
+ rsakeypair TP-self-signed-1441058062
+!
+crypto pki trustpoint TP-self-signed-3613846793
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3613846793
+ revocation-check none
+ rsakeypair TP-self-signed-3613846793
+!
+crypto pki trustpoint TP-self-signed-1368482409
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1368482409
+ revocation-check none
+ rsakeypair TP-self-signed-1368482409
+!
+crypto pki trustpoint TP-self-signed-675914241
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-675914241
+ revocation-check none
+ rsakeypair TP-self-signed-675914241
+!
+!
+crypto pki certificate chain TP-self-signed-2425066383
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-3045907028
+crypto pki certificate chain TP-self-signed-2057730617
+crypto pki certificate chain TP-self-signed-385815781
+crypto pki certificate chain TP-self-signed-716545758
+crypto pki certificate chain TP-self-signed-2861411470
+crypto pki certificate chain TP-self-signed-3628364303
+crypto pki certificate chain TP-self-signed-1441058062
+crypto pki certificate chain TP-self-signed-3613846793
+crypto pki certificate chain TP-self-signed-1368482409
+crypto pki certificate chain TP-self-signed-675914241
+license udi pid CSR1000V sn 9RE554U0JWI
+license accept end user agreement
+license boot level ax
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$yzAO$4TuXXI1WGqf0nSAxWpOH1/
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.8 255.255.255.255
+!
+interface Overlay0
+ no ip address
+ otv join-interface GigabitEthernet2.2
+ otv use-adjacency-server 10.100.0.11 unicast-only
+ service instance 100 ethernet
+  encapsulation dot1q 100
+  bridge-domain 100
+ !
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.0.251 255.255.0.0
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet2
+ description to dc-switch-1
+ no ip address
+ negotiation auto
+ cdp enable
+ service instance 100 ethernet
+  encapsulation dot1q 100
+  bridge-domain 100
+ !
+!
+interface GigabitEthernet2.2
+ encapsulation dot1Q 2 native
+ ip address 10.100.0.1 255.255.255.248
+ ip pim passive
+ ip igmp version 3
+ ip ospf cost 1
+!
+interface GigabitEthernet3
+ no ip address
+ negotiation auto
+ service instance 11 ethernet
+  encapsulation dot1q 11
+  bridge-domain 11
+ !
+!
+router ospf 1
+ passive-interface Loopback0
+ network 10.100.0.0 0.0.0.7 area 2
+ network 192.168.0.8 0.0.0.0 area 2
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip pim ssm default
+no ip http server
+ip http secure-server
+ip route 0.0.0.0 0.0.0.0 10.100.0.3
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 0 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 0 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.1" name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+    </node>
+    <node location="158,588" subtype="IOSvL2" type="SIMPLE" name="dc-switch-1">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="String" key="config">!
+! Last configuration change at 20:41:56 UTC Fri Jul 24 2015
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname dc-switch-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ no ip address
+!
+interface GigabitEthernet0/0
+ description Mapped to Vlan1 for management
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ description to dc-edge-1
+ switchport trunk allowed vlan 2,100
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ description to dc-otv-1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ description to dc-server-1
+ switchport access vlan 2
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ switchport access vlan 100
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ description to edge1 vlan 100
+ switchport access vlan 100
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface Vlan1
+ description OOB Management
+ ip address 10.255.1.7 255.255.0.0
+!
+interface Vlan2
+ ip address 10.100.0.14 255.255.255.248
+!
+interface Vlan100
+ ip address 10.254.254.253 255.255.255.0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface name="GigabitEthernet0/1" id="0"/>
+        <interface name="GigabitEthernet0/2" id="1"/>
+        <interface name="GigabitEthernet0/3" id="2"/>
+        <interface name="GigabitEthernet1/0" id="3"/>
+        <interface name="GigabitEthernet1/1" id="4"/>
+    </node>
+    <node location="1102,585" subtype="IOSvL2" type="SIMPLE" name="dc-switch-2">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="String" key="config">!
+! Last configuration change at 20:22:16 UTC Fri Jul 24 2015
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname dc-switch-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description Loopback
+ no ip address
+!
+interface GigabitEthernet0/0
+ description Mapped to Vlan1 for management
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ description to dc-edge-2
+ switchport access vlan 2
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ description to dc-otv-2
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 2
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ description to dc-server-2
+ switchport access vlan 2
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ description to otv-server-2
+ switchport access vlan 100
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ description to edge2 vlan 100
+ switchport access vlan 100
+ switchport mode access
+ media-type rj45
+ negotiation auto
+!
+interface Vlan1
+ description OOB Management
+ ip address 10.255.1.6 255.255.0.0
+!
+interface Vlan2
+ ip address 10.100.0.6 255.255.255.248
+!
+interface Vlan100
+ ip address 10.254.254.254 255.255.255.0
+!
+router ospf 1
+ network 10.100.0.0 0.0.0.7 area 2
+ network 10.254.254.0 0.0.0.255 area 2
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner exec `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner incoming `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+banner login `
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************`
+!
+line con 0
+ password cisco
+line aux 0
+line vty 0 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface name="GigabitEthernet0/1" id="0"/>
+        <interface name="GigabitEthernet0/2" id="1"/>
+        <interface name="GigabitEthernet0/3" id="2"/>
+        <interface name="GigabitEthernet1/0" id="3"/>
+        <interface name="GigabitEthernet1/1" id="4"/>
+    </node>
+    <node location="161,695" subtype="server" type="SIMPLE" name="dc-server-1">
+        <extensions>
+            <entry type="string" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: dc-server-1
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.100.0.9 netmask 255.255.255.248
+    route add -host 192.168.0.10 gw 10.100.0.10 dev eth1
+    route add -host 192.168.0.10 gw 10.100.0.11 dev eth1
+    route add -host 192.168.0.12 gw 10.100.0.10 dev eth1
+    route add -host 192.168.0.12 gw 10.100.0.11 dev eth1
+    route add -host 192.168.0.5 gw 10.100.0.10 dev eth1
+    route add -host 192.168.0.5 gw 10.100.0.11 dev eth1
+    route add -host 192.168.0.6 gw 10.100.0.10 dev eth1
+    route add -host 192.168.0.6 gw 10.100.0.11 dev eth1
+    route add -net 10.100.0.0/27 gw 10.100.0.10 dev eth1
+    route add -net 10.100.0.0/27 gw 10.100.0.11 dev eth1
+    route add -net 10.100.128.0/28 gw 10.100.0.10 dev eth1
+    route add -net 10.100.128.0/28 gw 10.100.0.11 dev eth1
+    route add -net 10.100.128.16/29 gw 10.100.0.10 dev eth1
+    route add -net 10.100.128.16/29 gw 10.100.0.11 dev eth1
+    route add -net 10.100.128.24/30 gw 10.100.0.10 dev eth1
+    route add -net 10.100.128.24/30 gw 10.100.0.11 dev eth1
+    route add -net 192.168.0.2/31 gw 10.100.0.10 dev eth1
+    route add -net 192.168.0.2/31 gw 10.100.0.11 dev eth1
+    route add -net 192.168.0.8/31 gw 10.100.0.10 dev eth1
+    route add -net 192.168.0.8/31 gw 10.100.0.11 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.9" name="eth1" id="0"/>
+    </node>
+    <node location="1107,693" subtype="server" type="SIMPLE" name="dc-server-2">
+        <extensions>
+            <entry type="string" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: dc-server-2
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.100.0.2 netmask 255.255.255.248
+    route add -host 192.168.0.10 gw 10.100.0.1 dev eth1
+    route add -host 192.168.0.10 gw 10.100.0.3 dev eth1
+    route add -host 192.168.0.12 gw 10.100.0.1 dev eth1
+    route add -host 192.168.0.12 gw 10.100.0.3 dev eth1
+    route add -host 192.168.0.5 gw 10.100.0.1 dev eth1
+    route add -host 192.168.0.5 gw 10.100.0.3 dev eth1
+    route add -host 192.168.0.6 gw 10.100.0.1 dev eth1
+    route add -host 192.168.0.6 gw 10.100.0.3 dev eth1
+    route add -net 10.100.0.0/27 gw 10.100.0.1 dev eth1
+    route add -net 10.100.0.0/27 gw 10.100.0.3 dev eth1
+    route add -net 10.100.128.0/28 gw 10.100.0.1 dev eth1
+    route add -net 10.100.128.0/28 gw 10.100.0.3 dev eth1
+    route add -net 10.100.128.16/29 gw 10.100.0.1 dev eth1
+    route add -net 10.100.128.16/29 gw 10.100.0.3 dev eth1
+    route add -net 10.100.128.24/30 gw 10.100.0.1 dev eth1
+    route add -net 10.100.128.24/30 gw 10.100.0.3 dev eth1
+    route add -net 192.168.0.2/31 gw 10.100.0.1 dev eth1
+    route add -net 192.168.0.2/31 gw 10.100.0.3 dev eth1
+    route add -net 192.168.0.8/31 gw 10.100.0.1 dev eth1
+    route add -net 192.168.0.8/31 gw 10.100.0.3 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.2" name="eth1" id="0"/>
+    </node>
+    <node location="430,486" subtype="Unmanaged Switch" type="SIMPLE" name="otv-site-1">
+        <interface name="link1" id="0"/>
+    </node>
+    <node location="810,478" subtype="Unmanaged Switch" type="SIMPLE" name="otv-site-2">
+        <interface name="link1" id="0"/>
+    </node>
+    <node location="299,693" subtype="server" type="SIMPLE" name="otv-server-1">
+        <extensions>
+            <entry type="String" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: otv-server-1
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.254.254.100 netmask 255.255.255.0 hw ether 12:34:45:67:89:ab
+    route add -host 192.168.0.10 gw 10.254.254.1 dev eth1
+    route add -host 192.168.0.12 gw 10.254.254.1 dev eth1
+    route add -host 192.168.0.5 gw 10.254.254.1 dev eth1
+    route add -host 192.168.0.6 gw 10.254.254.1 dev eth1
+    route add -net 10.100.0.0/27 gw 10.254.254.1 dev eth1
+    route add -net 10.100.0.32/28 gw 10.254.254.1 dev eth1
+    route add -net 10.100.0.48/30 gw 10.254.254.1 dev eth1
+    route add -net 10.100.128.0/28 gw 10.254.254.1 dev eth1
+    route add -net 192.168.0.2/31 gw 10.254.254.1 dev eth1
+    route add -net 192.168.0.8/31 gw 10.254.254.1 dev eth1
+    route add -net 10.100.128.24/30 gw 10.254.254.1 dev eth1
+    route add -net 10.100.128.16/30 gw 10.254.254.1 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.41" name="eth1" id="0"/>
+    </node>
+    <node location="1016,694" subtype="server" type="SIMPLE" name="otv-server-2">
+        <extensions>
+            <entry type="String" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: otv-server-2
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 down 10.254.254.100 netmask 255.255.255.0 hw ether 12:34:45:67:89:ab
+    route add -host 192.168.0.10 gw 10.254.254.1 dev eth1
+    route add -host 192.168.0.12 gw 10.254.254.1 dev eth1
+    route add -host 192.168.0.5 gw 10.254.254.1 dev eth1
+    route add -host 192.168.0.6 gw 10.254.254.1 dev eth1
+    route add -net 10.100.0.0/27 gw 10.254.254.1 dev eth1
+    route add -net 10.100.0.32/28 gw 10.254.254.1 dev eth1
+    route add -net 10.100.0.48/30 gw 10.254.254.1 dev eth1
+    route add -net 10.100.128.0/28 gw 10.254.254.1 dev eth1
+    route add -net 192.168.0.2/31 gw 10.254.254.1 dev eth1
+    route add -net 192.168.0.8/31 gw 10.254.254.1 dev eth1
+    route add -net 10.100.128.24/30 gw 10.254.254.1 dev eth1
+    route add -net 10.100.128.16/30 gw 10.254.254.1 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="29" ipv4="10.100.0.33" name="eth1" id="0"/>
+    </node>
+    <node location="490,74" subtype="CSR1000v" type="SIMPLE" name="ipcore-1">
+        <extensions>
+            <entry type="String" key="config">!
+! Last configuration change at 20:55:42 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname ipcore-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 5 $1$v4IQ$2jI3pTZYlyEQTWGDluHVS.
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-3130487279
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3130487279
+ revocation-check none
+ rsakeypair TP-self-signed-3130487279
+!
+crypto pki trustpoint TP-self-signed-2333856779
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2333856779
+ revocation-check none
+ rsakeypair TP-self-signed-2333856779
+!
+crypto pki trustpoint TP-self-signed-2525020170
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2525020170
+ revocation-check none
+ rsakeypair TP-self-signed-2525020170
+!
+!
+crypto pki certificate chain TP-self-signed-3130487279
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2333856779
+crypto pki certificate chain TP-self-signed-2525020170
+license udi pid CSR1000V sn 9XXE0XAT0DZ
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$dCKk$LAJP7yBS4NZU4Bj.3P5ys0
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.6 255.255.255.255
+!
+interface Loopback1
+ description LISP MR ANYCAST ADDRESS
+ ip address 10.90.90.90 255.255.255.255
+ ip pim sparse-mode
+!
+interface Loopback2
+ description LISP MS ADDRESS
+ ip address 10.91.91.91 255.255.255.255
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.1.3 255.255.0.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description to dc-edge-1
+ ip address 10.100.0.25 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet3
+ description to dc-edge-2
+ ip address 10.100.128.5 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet4
+ description to clientsite-1
+ ip address 10.100.0.22 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet5
+ description to clientsite-2
+ ip address 10.100.0.29 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet6
+ description to ipcore-2
+ ip address 10.100.128.13 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+router lisp
+ site CLIENT1
+  authentication-key cisco
+  eid-prefix 10.100.0.16/30
+  exit
+ !
+ site CLIENT2
+  authentication-key cisco
+  eid-prefix 10.100.128.24/30
+  exit
+ !
+ site DC1
+  description EID for DC1 
+  authentication-key cisco
+  eid-prefix 10.100.0.8/29 accept-more-specifics
+  exit
+ !
+ site DC1-DC2
+  authentication-key cisco
+  eid-prefix 10.254.254.0/24 accept-more-specifics
+  exit
+ !
+ site DC2
+  description EID for DC2
+  authentication-key cisco
+  eid-prefix 10.100.0.0/29 accept-more-specifics
+  exit
+ !
+ ipv4 map-server
+ ipv4 map-resolver
+ exit
+!
+router ospf 1
+ passive-interface Loopback0
+ network 1.1.1.1 0.0.0.0 area 0
+ network 10.90.90.90 0.0.0.0 area 0
+ network 10.91.91.91 0.0.0.0 area 0
+ network 10.100.0.20 0.0.0.3 area 0
+ network 10.100.0.24 0.0.0.3 area 0
+ network 10.100.0.28 0.0.0.3 area 0
+ network 10.100.128.4 0.0.0.3 area 0
+ network 10.100.128.12 0.0.0.3 area 0
+ network 192.168.0.6 0.0.0.0 area 0
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip pim rp-address 1.1.1.1
+ip msdp peer 192.160.0.12 connect-source Loopback0
+ip msdp cache-sa-state
+ip msdp originator-id Loopback0
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface name="GigabitEthernet4" id="2"/>
+        <interface name="GigabitEthernet5" id="3"/>
+        <interface name="GigabitEthernet6" id="4"/>
+    </node>
+    <node location="772,81" subtype="CSR1000v" type="SIMPLE" name="ipcore-2">
+        <extensions>
+            <entry type="String" key="config">!
+! Last configuration change at 20:27:07 UTC Fri Jul 24 2015
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname ipcore-2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+enable secret 5 $1$VOp2$GLRDorFv0vMav5op2OPjI.
+enable password cisco
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+no ip domain lookup
+
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki trustpoint TP-self-signed-4250123957
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-4250123957
+ revocation-check none
+ rsakeypair TP-self-signed-4250123957
+!
+crypto pki trustpoint TP-self-signed-937565122
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-937565122
+ revocation-check none
+ rsakeypair TP-self-signed-937565122
+!
+crypto pki trustpoint TP-self-signed-1916500822
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1916500822
+ revocation-check none
+ rsakeypair TP-self-signed-1916500822
+!
+!
+crypto pki certificate chain TP-self-signed-4250123957
+ certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-937565122
+crypto pki certificate chain TP-self-signed-1916500822
+license udi pid CSR1000V sn 9BRD8RL42YH
+spanning-tree extend system-id
+!
+username cisco privilege 15 secret 5 $1$fwmQ$jTdgKP1Z0Yifdd/STHLZD.
+!
+redundancy
+!
+!
+!
+!
+!
+cdp run
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!
+interface Loopback0
+ description Loopback
+ ip address 192.168.0.12 255.255.255.255
+!
+interface Loopback1
+ description LISP MR ANYCAST ADDRESS
+ ip address 10.90.90.90 255.255.255.255
+ ip pim sparse-mode
+!
+interface Loopback2
+ description LISP MS ADDRESS
+ ip address 10.92.92.92 255.255.255.255
+!
+interface GigabitEthernet1
+ description OOB Management
+ ip address 10.255.0.252 255.255.0.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description to dc-edge-1
+ ip address 10.100.128.10 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet3
+ description to dc-edge-2
+ ip address 10.100.128.17 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet4
+ description to clientsite-1
+ ip address 10.100.128.2 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet5
+ description to clientsite-2
+ ip address 10.100.128.21 255.255.255.252
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+interface GigabitEthernet6
+ description to ipcore-1
+ ip address 10.100.128.14 255.255.255.252
+ ip pim sparse-mode
+ ip ospf cost 1
+ negotiation auto
+ cdp enable
+!
+router lisp
+ site CLIENT1
+  authentication-key cisco
+  eid-prefix 10.100.0.16/30
+  exit
+ !
+ site CLIENT2
+  authentication-key cisco
+  eid-prefix 10.100.128.24/30
+  exit
+ !
+ site DC1
+  description EID for DC1 
+  authentication-key cisco
+  eid-prefix 10.100.0.8/29 accept-more-specifics
+  exit
+ !
+ site DC1-DC2
+  authentication-key cisco
+  eid-prefix 10.254.254.0/24 accept-more-specifics
+  exit
+ !
+ site DC2
+  description EID for DC2
+  authentication-key cisco
+  eid-prefix 10.100.0.0/29 accept-more-specifics
+  exit
+ !
+ ipv4 map-server
+ ipv4 map-resolver
+ exit
+!
+router ospf 1
+ passive-interface Loopback0
+ network 1.1.1.1 0.0.0.0 area 0
+ network 10.90.90.90 0.0.0.0 area 0
+ network 10.92.92.92 0.0.0.0 area 0
+ network 10.100.128.0 0.0.0.3 area 0
+ network 10.100.128.8 0.0.0.3 area 0
+ network 10.100.128.12 0.0.0.3 area 0
+ network 10.100.128.16 0.0.0.3 area 0
+ network 10.100.128.20 0.0.0.3 area 0
+ network 192.168.0.12 0.0.0.0 area 0
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+ip pim rp-address 1.1.1.1
+ip pim ssm default
+ip msdp peer 192.168.0.6 connect-source Loopback0
+ip msdp cache-sa-state
+ip msdp originator-id Loopback0
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ password cisco
+ stopbits 1
+line vty 0
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+line vty 1
+ exec-timeout 720 0
+ password cisco
+ login
+ length 0
+ transport input telnet ssh
+line vty 2 4
+ exec-timeout 720 0
+ password cisco
+ login
+ transport input telnet ssh
+!
+!
+end</entry>
+        </extensions>
+        <interface name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface name="GigabitEthernet4" id="2"/>
+        <interface name="GigabitEthernet5" id="3"/>
+        <interface name="GigabitEthernet6" id="4"/>
+    </node>
+    <connection src="/virl:topology/virl:node[3]/virl:interface[1]" dst="/virl:topology/virl:node[1]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[4]/virl:interface[1]" dst="/virl:topology/virl:node[2]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[3]" dst="/virl:topology/virl:node[9]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[9]/virl:interface[2]" dst="/virl:topology/virl:node[7]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[11]/virl:interface[1]" dst="/virl:topology/virl:node[9]/virl:interface[3]"/>
+    <connection src="/virl:topology/virl:node[6]/virl:interface[3]" dst="/virl:topology/virl:node[10]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[8]/virl:interface[1]" dst="/virl:topology/virl:node[10]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[12]/virl:interface[1]" dst="/virl:topology/virl:node[10]/virl:interface[3]"/>
+    <connection src="/virl:topology/virl:node[7]/virl:interface[2]" dst="/virl:topology/virl:node[13]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[8]/virl:interface[2]" dst="/virl:topology/virl:node[14]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[9]/virl:interface[4]" dst="/virl:topology/virl:node[15]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[10]/virl:interface[4]" dst="/virl:topology/virl:node[16]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[1]" dst="/virl:topology/virl:node[17]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[2]" dst="/virl:topology/virl:node[18]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[6]/virl:interface[1]" dst="/virl:topology/virl:node[17]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[6]/virl:interface[2]" dst="/virl:topology/virl:node[18]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[2]" dst="/virl:topology/virl:node[17]/virl:interface[3]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[3]" dst="/virl:topology/virl:node[18]/virl:interface[3]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[2]" dst="/virl:topology/virl:node[17]/virl:interface[4]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[3]" dst="/virl:topology/virl:node[18]/virl:interface[4]"/>
+    <connection src="/virl:topology/virl:node[17]/virl:interface[5]" dst="/virl:topology/virl:node[18]/virl:interface[5]"/>
+    <connection src="/virl:topology/virl:node[5]/virl:interface[4]" dst="/virl:topology/virl:node[9]/virl:interface[5]"/>
+    <connection src="/virl:topology/virl:node[6]/virl:interface[4]" dst="/virl:topology/virl:node[10]/virl:interface[5]"/>
+</topology>

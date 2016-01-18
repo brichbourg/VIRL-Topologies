@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <node ipv4="192.168.0.2" vmFlavor="CSR1000v" vmImage="CSR1000v" location="800,363" subtype="CSR1000v" type="SIMPLE" name="csr1000v-1">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="String" key="AutoNetkit.IGP">eigrp</entry>
+            <entry type="Boolean" key="AutoNetkit.LDP">true</entry>
+            <entry type="String" key="config">! IOS Config generated on 2015-07-20 15:43
+! by autonetkit_0.15.1
+!
+hostname csr1000v-1
+boot-start-marker
+boot-end-marker
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.2 255.255.255.255
+!
+interface GigabitEthernet1
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet2
+  description to flat-1
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet3
+  description to csr1000v-2
+  ip address 10.0.128.1 255.255.255.252
+  no shutdown
+  mpls ip
+!
+interface GigabitEthernet4
+  description to iosvl2-1
+  ip address 10.0.0.2 255.255.128.0
+  no shutdown
+  mpls ip
+!
+interface GigabitEthernet5
+  description GigabitEthernet5
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet6
+  description GigabitEthernet6
+  no ip address
+  no shutdown
+!
+!
+!
+router eigrp as1
+ !
+ address-family ipv4 unicast autonomous-system 1
+  !
+  topology base
+  exit-af-topology
+  network 10.0.0.0 0.0.127.255
+  network 10.0.128.0 0.0.0.3
+  network 192.168.0.2 0.0.0.0
+ exit-address-family
+ !
+!
+mpls ldp router-id Loopback0
+!
+router bgp 1
+  bgp router-id 192.168.0.2
+  no synchronization
+! ibgp
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.2 mask 255.255.255.255
+ exit-address-family
+!
+!
+!
+end
+</entry>
+        </extensions>
+        <interface name="GigabitEthernet2" id="0"/>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.1" name="GigabitEthernet3" id="1"/>
+        <interface netPrefixLenV4="17" ipv4="10.0.0.2" name="GigabitEthernet4" id="2"/>
+        <interface name="GigabitEthernet5" id="3"/>
+        <interface name="GigabitEthernet6" id="4"/>
+    </node>
+    <node ipv4="192.168.0.3" location="1018,359" subtype="CSR1000v" type="SIMPLE" name="csr1000v-2">
+        <extensions>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="String" key="AutoNetkit.IGP">eigrp</entry>
+            <entry type="Boolean" key="AutoNetkit.LDP">true</entry>
+            <entry type="String" key="config">! IOS Config generated on 2015-07-20 15:43
+! by autonetkit_0.15.1
+!
+hostname csr1000v-2
+boot-start-marker
+boot-end-marker
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.3 255.255.255.255
+!
+interface GigabitEthernet1
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet2
+  description to csr1000v-1
+  ip address 10.0.128.2 255.255.255.252
+  no shutdown
+  mpls ip
+!
+interface GigabitEthernet3
+  description to flat-2
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet4
+  description to iosvl2-1
+  ip address 10.0.0.3 255.255.128.0
+  no shutdown
+  mpls ip
+!
+!
+!
+router eigrp as1
+ !
+ address-family ipv4 unicast autonomous-system 1
+  !
+  topology base
+  exit-af-topology
+  network 10.0.0.0 0.0.127.255
+  network 10.0.128.0 0.0.0.3
+  network 192.168.0.3 0.0.0.0
+ exit-address-family
+ !
+!
+mpls ldp router-id Loopback0
+!
+router bgp 1
+  bgp router-id 192.168.0.3
+  no synchronization
+! ibgp
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.3 mask 255.255.255.255
+ exit-address-family
+!
+!
+!
+end
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.2" name="GigabitEthernet2" id="0"/>
+        <interface name="GigabitEthernet3" id="1"/>
+        <interface netPrefixLenV4="17" ipv4="10.0.0.3" name="GigabitEthernet4" id="2"/>
+    </node>
+    <node location="893,248" subtype="FLAT" type="ASSET" name="flat-1">
+        <interface name="link0" id="0"/>
+        <interface name="link1" id="1"/>
+    </node>
+    <node location="921,488" subtype="IOSvL2" type="SIMPLE" name="iosvl2-1">
+        <extensions>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="String" key="AutoNetkit.IGP">eigrp</entry>
+            <entry type="String" key="AutoNetkit.ospf_area">0</entry>
+            <entry type="Boolean" key="AutoNetkit.LDP">true</entry>
+            <entry type="string" key="config">! IOSvL2 Config generated on 2015-07-20 15:43
+! by autonetkit_0.15.1
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+no service config
+enable password cisco
+ip classless
+ip subnet-zero
+no ip domain lookup
+!
+line vty 0 4
+transport input ssh telnet
+exec-timeout 720 0
+password cisco
+login
+!
+line con 0
+password cisco
+!
+hostname iosvl2-1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+  description Loopback
+!
+interface GigabitEthernet0/0
+  description Mapped to Vlan1 for management
+  ! Configured on launch
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/1
+  description to csr1000v-1
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/2
+  description to csr1000v-2
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface GigabitEthernet0/3
+  description to server-1
+  switchport access vlan 2
+  switchport mode access
+  no shutdown
+!
+interface Vlan1
+  description OOB Management
+  ! Configured on launch
+  no ip address
+!
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+end
+        </entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface name="GigabitEthernet0/1" id="0"/>
+        <interface name="GigabitEthernet0/2" id="1"/>
+        <interface name="GigabitEthernet0/3" id="2"/>
+    </node>
+    <node location="920,569" subtype="server" type="SIMPLE" name="server-1">
+        <extensions>
+            <entry type="string" key="config">#cloud-config
+bootcmd:
+- ln -s -t /etc/rc.d /etc/rc.local
+hostname: server-1
+manage_etc_hosts: true
+runcmd:
+- start ttyS0
+- systemctl start getty@ttyS0.service
+- systemctl start rc-local
+- sed -i '/^\s*PasswordAuthentication\s\+no/d' /etc/ssh/sshd_config
+- echo &quot;UseDNS no&quot; &gt;&gt; /etc/ssh/sshd_config
+- service ssh restart
+- service sshd restart
+users:
+- default
+- gecos: User configured by VIRL Configuration Engine 0.15.5
+  lock-passwd: false
+  name: cisco
+  plain-text-passwd: cisco
+  shell: /bin/bash
+  ssh-authorized-keys:
+  - VIRL-USER-SSH-PUBLIC-KEY
+  sudo: ALL=(ALL) ALL
+write_files:
+- path: /etc/init/ttyS0.conf
+  owner: root:root
+  content: |
+    # ttyS0 - getty
+    # This service maintains a getty on ttyS0 from the point the system is
+    # started until it is shut down again.
+    start on stopped rc or RUNLEVEL=[12345]
+    stop on runlevel [!12345]
+    respawn
+    exec /sbin/getty -L 115200 ttyS0 vt102
+  permissions: '0644'
+- path: /etc/systemd/system/dhclient@.service
+  content: |
+    [Unit]
+    Description=Run dhclient on %i interface
+    After=network.target
+    [Service]
+    Type=oneshot
+    ExecStart=/sbin/dhclient %i -pf /var/run/dhclient.%i.pid -lf /var/lib/dhclient/dhclient.%i.lease
+    RemainAfterExit=yes
+  owner: root:root
+  permissions: '0644'
+- path: /etc/rc.local
+  owner: root:root
+  permissions: '0755'
+  content: |-
+    #!/bin/sh -e
+    ifconfig eth1 up 10.0.0.1 netmask 255.255.128.0
+    route add -net 10.0.0.0/16 gw 10.0.0.2 dev eth1
+    route add -net 10.0.0.0/16 gw 10.0.0.3 dev eth1
+    route add -net 192.168.0.0/29 gw 10.0.0.2 dev eth1
+    route add -net 192.168.0.0/29 gw 10.0.0.3 dev eth1
+    exit 0
+</entry>
+        </extensions>
+        <interface netPrefixLenV4="17" ipv4="10.0.0.1" name="eth1" id="0"/>
+    </node>
+    <node location="931,250" subtype="FLAT" type="ASSET" name="flat-2">
+        <interface name="link0" id="0"/>
+    </node>
+    <node ipv4="192.168.0.4" location="577,224" subtype="CSR1000v" type="SIMPLE" name="csr1000v-3">
+        <extensions>
+            <entry type="String" key="AutoNetkit.IGP">eigrp</entry>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="config">! IOS Config generated on 2015-07-20 15:43
+! by autonetkit_0.15.1
+!
+hostname csr1000v-3
+boot-start-marker
+boot-end-marker
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.4 255.255.255.255
+!
+interface GigabitEthernet1
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet2
+  description to csr1000v-4
+  ip address 10.0.128.5 255.255.255.252
+  no shutdown
+!
+!
+!
+router eigrp as1
+ !
+ address-family ipv4 unicast autonomous-system 1
+  !
+  topology base
+  exit-af-topology
+  network 10.0.128.4 0.0.0.3
+  network 192.168.0.4 0.0.0.0
+ exit-address-family
+ !
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.4
+  no synchronization
+! ibgp
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.4 mask 255.255.255.255
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.5" name="GigabitEthernet2" id="0"/>
+    </node>
+    <node ipv4="192.168.0.5" location="688,318" subtype="CSR1000v" type="SIMPLE" name="csr1000v-4">
+        <extensions>
+            <entry type="String" key="AutoNetkit.IGP">eigrp</entry>
+            <entry type="String" key="AutoNetkit.ibgp_role">Disabled</entry>
+            <entry type="string" key="config">! IOS Config generated on 2015-07-20 15:43
+! by autonetkit_0.15.1
+!
+hostname csr1000v-4
+boot-start-marker
+boot-end-marker
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login
+line con 0
+ password cisco
+!
+no cdp run
+!
+!
+interface Loopback0
+  description Loopback
+  ip address 192.168.0.5 255.255.255.255
+!
+interface GigabitEthernet1
+  description OOB Management
+  ! Configured on launch
+  no ip address
+  no shutdown
+!
+interface GigabitEthernet2
+  description to csr1000v-3
+  ip address 10.0.128.6 255.255.255.252
+  no shutdown
+!
+!
+!
+router eigrp as1
+ !
+ address-family ipv4 unicast autonomous-system 1
+  !
+  topology base
+  exit-af-topology
+  network 10.0.128.4 0.0.0.3
+  network 192.168.0.5 0.0.0.0
+ exit-address-family
+ !
+!
+!
+router bgp 1
+  bgp router-id 192.168.0.5
+  no synchronization
+! ibgp
+!
+!
+ !
+ address-family ipv4
+  network 192.168.0.5 mask 255.255.255.255
+ exit-address-family
+!
+!
+!
+end
+</entry>
+            <entry type="string" key="AutoNetkit.mgmt_ip"></entry>
+        </extensions>
+        <interface netPrefixLenV4="30" ipv4="10.0.128.6" name="GigabitEthernet2" id="0"/>
+    </node>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[1]" dst="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[2]" dst="/virl:topology/virl:node[2]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[1]/virl:interface[3]" dst="/virl:topology/virl:node[4]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[3]" dst="/virl:topology/virl:node[4]/virl:interface[2]"/>
+    <connection src="/virl:topology/virl:node[4]/virl:interface[3]" dst="/virl:topology/virl:node[5]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[2]/virl:interface[2]" dst="/virl:topology/virl:node[6]/virl:interface[1]"/>
+    <connection src="/virl:topology/virl:node[7]/virl:interface[1]" dst="/virl:topology/virl:node[8]/virl:interface[1]"/>
+</topology>
