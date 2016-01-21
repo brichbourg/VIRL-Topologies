@@ -6,7 +6,7 @@
             <entry key="AutoNetkit.ASN" type="Integer">54435</entry>
             <entry key="static_serial_port_0" type="Integer">17004</entry>
             <entry key="config" type="String">!
-! Last configuration change at 02:25:24 UTC Tue Jan 19 2016
+! Last configuration change at 21:47:32 UTC Wed Jan 20 2016
 !
 version 15.5
 service config
@@ -89,6 +89,12 @@ key chain pfr
  key 0
    key-string cisco 
 !
+crypto pki trustpoint TP-self-signed-3900864310
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3900864310
+ revocation-check none
+ rsakeypair TP-self-signed-3900864310
+!
 crypto pki trustpoint TP-self-signed-1327619815
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-1327619815
@@ -138,8 +144,9 @@ crypto pki trustpoint TP-self-signed-1018421904
  rsakeypair TP-self-signed-1018421904
 !
 !
-crypto pki certificate chain TP-self-signed-1327619815
+crypto pki certificate chain TP-self-signed-3900864310
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-1327619815
 crypto pki certificate chain TP-self-signed-319728672
 crypto pki certificate chain TP-self-signed-4050964916
 crypto pki certificate chain TP-self-signed-1158490112
@@ -158,7 +165,7 @@ pfr border
 !
 !
 !
-license udi pid CSR1000V sn 9LDT435GL64
+license udi pid CSR1000V sn 9TF2AOXQ1W6
 license accept end user agreement
 license boot level ax
 !
@@ -200,7 +207,7 @@ interface Loopback0
 !
 interface GigabitEthernet1
  description OOB Management
- ip address 10.255.0.60 255.255.0.0
+ ip address 10.255.0.69 255.255.0.0
  negotiation auto
 !
 interface GigabitEthernet2
@@ -243,13 +250,11 @@ router bgp 54435
  neighbor 192.168.0.4 update-source Loopback0
  !
  address-family ipv4
-  network 10.0.0.12 mask 255.255.255.252
-  network 172.16.2.0 mask 255.255.255.0
-  network 192.168.0.6 mask 255.255.255.255
+  network 10.0.128.20 mask 255.255.255.252
+  network 38.110.31.128 mask 255.255.255.128
   neighbor 10.0.128.22 activate
   neighbor 10.0.128.22 send-community
-  neighbor 10.0.128.22 soft-reconfiguration inbound
-  neighbor 10.0.128.22 route-map Provider-1 out
+  neighbor 10.0.128.22 route-map Provider-2 out
   neighbor 38.110.31.129 activate
   neighbor 38.110.31.129 next-hop-self
   neighbor 192.168.0.4 activate
@@ -268,22 +273,16 @@ ip http secure-server
 ip tftp source-interface GigabitEthernet1
 ip route 10.0.0.12 255.255.255.252 Null0 254
 !
+access-list 101 permit ip host 38.110.31.0 host 255.255.255.128
+access-list 102 permit ip host 38.110.31.128 host 255.255.255.128
 !
-ip prefix-list outside-1 seq 5 permit 172.16.1.0/24
-access-list 101 permit ip host 172.16.1.0 host 255.255.255.0
-access-list 102 permit ip host 172.16.2.0 host 255.255.255.0
-!
-route-map Provider-1 permit 10
+route-map Provider-2 permit 10
  match ip address 101
  set community 174:70
 !
-route-map Provider-1 permit 20
+route-map Provider-2 permit 20
  match ip address 102
  set community 174:140
-!
-route-map ISP-2 permit 10
- match ip address prefix-list outside-1
- set metric 100
 !
 !
 !
@@ -333,7 +332,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">54435</entry>
             <entry key="static_serial_port_0" type="Integer">17003</entry>
             <entry key="config" type="String">!
-! Last configuration change at 02:17:48 UTC Tue Jan 19 2016
+! Last configuration change at 22:17:08 UTC Wed Jan 20 2016
 !
 version 15.5
 service config
@@ -416,6 +415,12 @@ key chain pfr
  key 0
    key-string cisco 
 !
+crypto pki trustpoint TP-self-signed-1551417033
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1551417033
+ revocation-check none
+ rsakeypair TP-self-signed-1551417033
+!
 crypto pki trustpoint TP-self-signed-2502857682
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-2502857682
@@ -465,8 +470,9 @@ crypto pki trustpoint TP-self-signed-1303019219
  rsakeypair TP-self-signed-1303019219
 !
 !
-crypto pki certificate chain TP-self-signed-2502857682
+crypto pki certificate chain TP-self-signed-1551417033
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2502857682
 crypto pki certificate chain TP-self-signed-2435326653
 crypto pki certificate chain TP-self-signed-1027387483
 crypto pki certificate chain TP-self-signed-2322120000
@@ -478,21 +484,22 @@ crypto pki certificate chain TP-self-signed-1303019219
 pfr master
  logging
  !
- border 192.168.0.6 key-chain pfr
-  interface GigabitEthernet2 external
-  interface GigabitEthernet4 internal
- !
  border 192.168.0.4 key-chain pfr
-  interface GigabitEthernet2 external
   interface GigabitEthernet4 internal
+  interface GigabitEthernet2 external
+ !
+ border 192.168.0.6 key-chain pfr
+  interface GigabitEthernet4 internal
+  interface GigabitEthernet2 external
  !
  learn
   periodic-interval 1
   prefixes 250 applications 250
   aggregation-type prefix-length 32
- max range receive percent 10
+ max range receive percent 1
  mode monitor passive
- mode route metric bgp local-pref 50
+ mode route metric bgp local-pref 150
+ !
 !
 pfr border
  local Loopback0
@@ -504,7 +511,7 @@ pfr border
 !
 !
 !
-license udi pid CSR1000V sn 9BO4BB9WBKT
+license udi pid CSR1000V sn 92XOC4H7IBY
 license accept end user agreement
 license boot level ax
 !
@@ -551,7 +558,7 @@ interface Loopback1
 !
 interface GigabitEthernet1
  description OOB Management
- ip address 10.255.0.58 255.255.0.0
+ ip address 10.255.0.68 255.255.0.0
  negotiation auto
 !
 interface GigabitEthernet2
@@ -594,12 +601,10 @@ router bgp 54435
  neighbor 192.168.0.6 update-source Loopback0
  !
  address-family ipv4
-  network 10.0.0.12 mask 255.255.255.252
-  network 172.16.1.0 mask 255.255.255.0
-  network 192.168.0.4 mask 255.255.255.255
+  network 10.0.0.4 mask 255.255.255.252
+  network 38.110.31.0 mask 255.255.255.128
   neighbor 10.0.0.6 activate
   neighbor 10.0.0.6 send-community
-  neighbor 10.0.0.6 soft-reconfiguration inbound
   neighbor 10.0.0.6 route-map Provider-1 out
   neighbor 38.110.31.1 activate
   neighbor 38.110.31.1 next-hop-self
@@ -619,10 +624,8 @@ ip http secure-server
 ip tftp source-interface GigabitEthernet1
 ip route 10.0.0.12 255.255.255.252 Null0 254
 !
-!
-ip prefix-list outside-2 seq 5 permit 172.16.2.0/24
-access-list 101 permit ip host 172.16.1.0 host 255.255.255.0
-access-list 102 permit ip host 172.16.2.0 host 255.255.255.0
+access-list 101 permit ip host 38.110.31.0 host 255.255.255.128
+access-list 102 permit ip host 38.110.31.128 host 255.255.255.128
 !
 route-map Provider-1 permit 10
  match ip address 101
@@ -630,10 +633,7 @@ route-map Provider-1 permit 10
 !
 route-map Provider-1 permit 20
  match ip address 102
-!
-route-map ISP-1 permit 10
- match ip address prefix-list outside-2
- set metric 100
+ set community 174:70
 !
 !
 !
@@ -682,7 +682,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
             <entry key="static_serial_port_0" type="Integer">17005</entry>
             <entry key="config" type="String">!
-! Last configuration change at 02:08:52 UTC Tue Jan 19 2016
+! Last configuration change at 01:33:20 UTC Thu Jan 21 2016
 !
 version 15.5
 service config
@@ -743,6 +743,12 @@ multilink bundle-name authenticated
 !
 !
 !
+crypto pki trustpoint TP-self-signed-3343548744
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3343548744
+ revocation-check none
+ rsakeypair TP-self-signed-3343548744
+!
 crypto pki trustpoint TP-self-signed-4051838331
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-4051838331
@@ -792,8 +798,9 @@ crypto pki trustpoint TP-self-signed-9700629
  rsakeypair TP-self-signed-9700629
 !
 !
-crypto pki certificate chain TP-self-signed-4051838331
+crypto pki certificate chain TP-self-signed-3343548744
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-4051838331
 crypto pki certificate chain TP-self-signed-1316378232
 crypto pki certificate chain TP-self-signed-1511396631
 crypto pki certificate chain TP-self-signed-4065222179
@@ -808,7 +815,7 @@ crypto pki certificate chain TP-self-signed-9700629
 !
 !
 !
-license udi pid CSR1000V sn 9MTYLBS2CB2
+license udi pid CSR1000V sn 9VHW6URHSYV
 license accept end user agreement
 license boot level ax
 !
@@ -850,7 +857,7 @@ interface Loopback0
 !
 interface GigabitEthernet1
  description OOB Management
- ip address 10.255.0.52 255.255.0.0
+ ip address 10.255.0.63 255.255.0.0
  negotiation auto
 !
 interface GigabitEthernet2
@@ -872,6 +879,7 @@ interface GigabitEthernet4
 interface GigabitEthernet5
  description to empty
  ip address 10.0.128.5 255.255.255.252
+ shutdown
  negotiation auto
 !
 interface GigabitEthernet6
@@ -1002,7 +1010,7 @@ end</entry>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
             <entry key="static_serial_port_0" type="Integer">17006</entry>
             <entry key="config" type="String">!
-! Last configuration change at 02:09:02 UTC Tue Jan 19 2016
+! Last configuration change at 13:23:12 UTC Wed Jan 20 2016
 !
 version 15.5
 service config
@@ -1063,6 +1071,12 @@ multilink bundle-name authenticated
 !
 !
 !
+crypto pki trustpoint TP-self-signed-71028793
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-71028793
+ revocation-check none
+ rsakeypair TP-self-signed-71028793
+!
 crypto pki trustpoint TP-self-signed-2639914688
  enrollment selfsigned
  subject-name cn=IOS-Self-Signed-Certificate-2639914688
@@ -1112,8 +1126,9 @@ crypto pki trustpoint TP-self-signed-1695732990
  rsakeypair TP-self-signed-1695732990
 !
 !
-crypto pki certificate chain TP-self-signed-2639914688
+crypto pki certificate chain TP-self-signed-71028793
  certificate self-signed 01 nvram:IOS-Self-Sig#1.cer
+crypto pki certificate chain TP-self-signed-2639914688
 crypto pki certificate chain TP-self-signed-2594183243
 crypto pki certificate chain TP-self-signed-767536833
 crypto pki certificate chain TP-self-signed-3062649813
@@ -1128,7 +1143,7 @@ crypto pki certificate chain TP-self-signed-1695732990
 !
 !
 !
-license udi pid CSR1000V sn 982R5GZ44IQ
+license udi pid CSR1000V sn 90T29V6K5A6
 license accept end user agreement
 license boot level ax
 !
@@ -1170,7 +1185,7 @@ interface Loopback0
 !
 interface GigabitEthernet1
  description OOB Management
- ip address 10.255.0.53 255.255.0.0
+ ip address 10.255.0.62 255.255.0.0
  negotiation auto
 !
 interface GigabitEthernet2
@@ -1700,28 +1715,31 @@ xlate per-session deny udp any4 any6 eq domain
 xlate per-session deny udp any6 any4 eq domain
 xlate per-session deny udp any6 any6 eq domain
 names
+zone outside
 !
 interface GigabitEthernet0/0
  nameif outside-1
  security-level 0
+ zone-member outside
  ip address 38.110.31.1 255.255.255.128 
 !
 interface GigabitEthernet0/1
  nameif outside-2
  security-level 0
+ zone-member outside
  ip address 38.110.31.129 255.255.255.128 
 !
 interface GigabitEthernet0/2
  nameif inside
  security-level 100
- ip address 172.16.1.63 255.255.255.0 
+ ip address 172.16.1.2 255.255.255.0 
 !
 interface Management0/0
  management-only
  shutdown
  no nameif
  no security-level
- no ip address
+ ip address 10.255.0.64 255.255.0.0 
 !
 ftp mode passive
 access-list inside_access_in extended permit ip any4 any4 
@@ -1748,6 +1766,7 @@ access-group outside_access_in in interface outside-2
 access-group inside_access_in in interface inside
 router bgp 54435
  bgp log-neighbor-changes
+ bgp router-id 172.16.1.2
  address-family ipv4 unicast
   neighbor 38.110.31.126 remote-as 54435
   neighbor 38.110.31.126 description WAN-EDGE-1
@@ -1762,6 +1781,9 @@ router bgp 54435
   no synchronization
  exit-address-family
 !
+router eigrp 1
+!
+route inside 10.10.1.0 255.255.255.0 172.16.1.1 1
 timeout xlate 3:00:00
 timeout pat-xlate 0:00:30
 timeout conn 1:00:00 half-closed 0:10:00 udp 0:02:00 icmp 0:00:02
@@ -1772,6 +1794,7 @@ timeout tcp-proxy-reassembly 0:01:00
 timeout floating-conn 0:00:00
 user-identity default-domain LOCAL
 aaa authentication ssh console LOCAL 
+aaa authentication http console LOCAL 
 http server enable
 http 10.10.1.0 255.255.255.0 inside
 no snmp-server location
@@ -1844,7 +1867,7 @@ no threat-detection basic-threat
 threat-detection statistics access-list
 no threat-detection statistics tcp-intercept
 dynamic-access-policy-record DfltAccessPolicy
-username admin password 7KKG/zg/Wo8c.YfN encrypted privilege 15
+username admin password f3UhLvUj1QsXsuK7 encrypted privilege 15
 !
 class-map inspection_default
  match default-inspection-traffic
@@ -1905,7 +1928,7 @@ call-home
         <extensions>
             <entry key="static_serial_port_0" type="Integer">17001</entry>
             <entry key="config" type="String">!
-! Last configuration change at 01:50:46 UTC Tue Jan 19 2016
+! Last configuration change at 01:20:04 UTC Thu Jan 21 2016
 !
 version 15.2
 service timestamps debug datetime msec
@@ -1967,13 +1990,15 @@ interface GigabitEthernet0/1
 !
 interface GigabitEthernet0/2
  description WAN-EDGE-1
- switchport access vlan 100
- switchport mode access
+ switchport trunk allowed vlan 100,300
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 100
+ switchport mode trunk
  media-type rj45
  negotiation auto
 !
 interface GigabitEthernet0/3
- switchport trunk allowed vlan 1,100,200
+ switchport trunk allowed vlan 1,100,200,300
  switchport trunk encapsulation dot1q
  switchport mode trunk
  media-type rj45
@@ -2022,6 +2047,7 @@ banner login `
 line con 0
 line aux 0
 line vty 0 4
+ login
 !
 !
 end</entry>
@@ -2034,7 +2060,7 @@ end</entry>
         <extensions>
             <entry key="static_serial_port_0" type="Integer">17002</entry>
             <entry key="config" type="String">!
-! Last configuration change at 02:28:08 UTC Tue Jan 19 2016
+! Last configuration change at 01:20:21 UTC Thu Jan 21 2016
 !
 version 15.2
 service timestamps debug datetime msec
